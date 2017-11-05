@@ -1,9 +1,8 @@
 package com.crud.tasks.controller;
 
 import com.crud.tasks.domain.TaskDto;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,26 +11,26 @@ import java.util.List;
 @RequestMapping("/v1/task")
 public class TaskController {
 
-    @RequestMapping(method = RequestMethod.GET, value = "getTasks")
+    @GetMapping(value = "getTasks")
     public List<TaskDto> getTasks() {
         return new ArrayList<>();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "getTask")
-    public TaskDto getTask(Long taskId) {
+    @GetMapping(value = "getTask/{taskId}")
+    public TaskDto getTask(@PathVariable("taskId") Long taskId) {
         return new TaskDto((long) 1, "test_title", "test_Content");
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "deleteTasks")
-    public void deleteTask(Long TaskId) {
+    @DeleteMapping(value = "deleteTask/{taskId}")
+    public void deleteTask(@PathVariable("taskId") Long taskId) {
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "updateTasks")
-    public TaskDto updateTask(TaskDto taskDto) {
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "updateTasks")
+    public TaskDto updateTask(@RequestBody TaskDto taskDto) {
         return new TaskDto((long) 1, "edited_test_title", "edited_test_Content");
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "createTasks")
-    public void createTask(TaskDto taskDto) {
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "createTasks")
+    public void createTask(@RequestBody TaskDto taskDto) {
     }
 }
