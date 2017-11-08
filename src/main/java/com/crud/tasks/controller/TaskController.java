@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/task")
+@RequestMapping("/v1/tasks")
 public class TaskController {
 
     private final DbService dbService;
@@ -22,17 +22,17 @@ public class TaskController {
         this.taskMapper = taskMapper;
     }
 
-    @GetMapping(value = "getTasks")
+    @GetMapping()
     public List<TaskDto> getTasks() {
         return taskMapper.mapToTaskDtoList(dbService.getAllTasks());
     }
 
-    @GetMapping(value = "getTask/{taskId}")
+    @GetMapping(value = "{taskId}")
     public TaskDto getTask(@PathVariable("taskId") Long taskId) {
         return taskMapper.mapToTaskDto(dbService.getTaskById(taskId));
     }
 
-    @DeleteMapping(value = "deleteTask/{taskId}")
+    @DeleteMapping(value = "{taskId}")
     public void deleteTask(@PathVariable("taskId") Long taskId) {
     }
 
