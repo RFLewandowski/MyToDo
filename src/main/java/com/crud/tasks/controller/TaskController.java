@@ -1,24 +1,32 @@
 package com.crud.tasks.controller;
 
 import com.crud.tasks.domain.TaskDto;
+import com.crud.tasks.mapper.TaskMapper;
+import com.crud.tasks.service.DbService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/v1/task")
 public class TaskController {
 
+    @Autowired
+    private DbService dbService;
+
+    @Autowired
+    private TaskMapper taskMapper;
+
     @GetMapping(value = "getTasks")
     public List<TaskDto> getTasks() {
-        return new ArrayList<>();
+        return taskMapper.mapToTaskDtoList(dbService.getAllTasks());
     }
 
     @GetMapping(value = "getTask/{taskId}")
     public TaskDto getTask(@PathVariable("taskId") Long taskId) {
-        return new TaskDto((long) 1, "test_title", "test_Content");
+        return taskMapper.mapToTaskDto(dbService.getTaskById(taskId));
     }
 
     @DeleteMapping(value = "deleteTask/{taskId}")
