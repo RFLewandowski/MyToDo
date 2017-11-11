@@ -28,8 +28,8 @@ public class TaskController {
     }
 
     @GetMapping(value = "{taskId}")
-    public TaskDto getTask(@PathVariable("taskId") Long taskId) {
-        return taskMapper.mapToTaskDto(dbService.getTaskById(taskId));
+    public TaskDto getTask(@PathVariable("taskId") Long taskId) throws TaskNotFoundException {
+        return taskMapper.mapToTaskDto(dbService.getTask(taskId).orElseThrow(TaskNotFoundException::new));
     }
 
     @DeleteMapping(value = "{taskId}")
