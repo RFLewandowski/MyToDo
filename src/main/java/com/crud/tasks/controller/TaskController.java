@@ -34,11 +34,12 @@ public class TaskController {
 
     @DeleteMapping(value = "{taskId}")
     public void deleteTask(@PathVariable("taskId") Long taskId) {
+        dbService.deleteTask(taskId);
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "updateTasks")
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public TaskDto updateTask(@RequestBody TaskDto taskDto) {
-        return new TaskDto((long) 1, "edited_test_title", "edited_test_Content");
+        return taskMapper.mapToTaskDto(dbService.saveTask(taskMapper.mapToTask(taskDto)));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
