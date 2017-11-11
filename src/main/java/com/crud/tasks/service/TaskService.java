@@ -10,12 +10,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class DbService {
+public class TaskService {
 
     private final TaskRepository repository;
 
-    @Autowired
-    public DbService(TaskRepository repository) {
+    public TaskService(TaskRepository repository) {
         this.repository = repository;
     }
 
