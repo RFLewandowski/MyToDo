@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/v1/tasks")
 public class TaskController {
@@ -26,7 +27,7 @@ public class TaskController {
         return taskMapper.mapToTaskDtoList(taskService.getAllTasks());
     }
 
-    @GetMapping(value = "{taskId}")
+    @GetMapping("{taskId}")
     public TaskDto getTask(@PathVariable("taskId") Long taskId) throws TaskNotFoundException {
         return taskMapper
                 .mapToTaskDto(taskService
@@ -34,12 +35,12 @@ public class TaskController {
                         .orElseThrow(TaskNotFoundException::new));
     }
 
-    @DeleteMapping(value = "{taskId}")
+    @DeleteMapping("{taskId}")
     public void deleteTask(@PathVariable("taskId") Long taskId) {
         taskService.deleteTask(taskId);
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "{taskId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public TaskDto updateTask(@RequestBody TaskDto taskDto) {
         return taskMapper.mapToTaskDto(taskService.saveTask(taskMapper.mapToTask(taskDto)));
     }
