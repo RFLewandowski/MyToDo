@@ -7,8 +7,6 @@ goto fail
 :runchrome
 @rem find commands to run chrome
 @rem and open http://localhost:8080/crud/v1/tasks
-if "%ERRORLEVEL%" == "0" goto stoptomcat
-echo Cannot rename file
 goto end
 
 
