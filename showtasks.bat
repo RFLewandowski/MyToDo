@@ -5,10 +5,8 @@ echo Cannot run chrome browser - breaking work
 goto fail
 
 :runchrome
-@rem find commands to run chrome
-@rem and open http://localhost:8080/crud/v1/tasks
+start "" "http://localhost:8080/crud/v1/tasks"
 goto end
-
 
 :fail
 echo.
