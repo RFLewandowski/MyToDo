@@ -2,20 +2,27 @@ package com.crud.tasks;
 
 import com.crud.tasks.controller.TaskController;
 import com.crud.tasks.domain.Task;
+import com.crud.tasks.domain.TaskDto;
 import com.crud.tasks.domain.TaskNotFoundException;
-import com.crud.tasks.mapper.TaskMapper;
 import com.crud.tasks.service.TaskService;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.mock.http.MockHttpOutputMessage;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import java.io.IOException;
+import java.util.List;
+
+import static org.junit.Assert.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -31,79 +38,104 @@ public class TaskControllerTestSuite {
     private TaskService taskService;
 
     @Autowired
-    private TaskMapper taskMapper;
-
-    @Autowired
     private TaskController taskController;
 
+    @Autowired
+    private HttpMessageConverter mappingJackson2HttpMessageConverter;
 
     @Test
     public void ShouldLoadContext() {
-        Assert.assertNotNull(taskController);
-    }
-
-    @Test
-    public void ShouldSaveToH2Database() throws TaskNotFoundException {
-        //Given
-        Task savedTask = new Task((long) 1, "testTitleH2Db", "dummyContent");
-        taskService.saveTask(savedTask);
-
-        //When
-        Task recoveredTask = taskService.getTask((long) 1)
-                .orElseThrow(TaskNotFoundException::new);
-        //Then
-        Assert.assertEquals("testTitleH2Db", recoveredTask.getTitle());
+        assertNotNull(taskController);
     }
 
     @Test
     public void ShouldGETTasks() throws Exception {
-        //Given
-        Task savedTask = new Task((long) 1, "testTitleH2Db", "dummyContent");
-        taskService.saveTask(savedTask);
-        //When
-        //Then
         this.mockMvc
                 .perform(get("/v1/tasks"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.[0].title").value("testTitleH2Db"));
+                .andExpect(jsonPath("$.[0].title").value("testTitleH2Db1"));
+    }
 
+    @Test
+    public void ShouldGETOneTask() throws Exception {
+        this.mockMvc
+                .perform(get("/v1/tasks/2"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.title").value("testTitleH2Db2"));
+    }
 
-//        System.out.println(this.mockMvc
-//                .perform(get("/v1/tasks"))
-//                .andReturn().getResponse().getContentAsString());
+    @Test
+    public void ShouldDELETETask() throws Exception {
 
+        //Given
+        //When
+        this.mockMvc
+                .perform(delete("/v1/tasks/3"))
+                .andDo(print())
+                .andExpect(status().isOk());
 
-//                .andExpect(jsonPath("$.title").value("testTitleH2Db"));
+        List<Task> recoveredTasks = taskService.getAllTasks();
+
+        //Then
+        Assert.assertEquals(2, recoveredTasks.size());
 
     }
 
     @Test
-    public void ShouldGETOneTask() {
+    public void ShouldPUTTask() throws Exception {
         //Given
-        //When
-        //Then
-    }
+        TaskDto dummyTask = new TaskDto((long) 3, "dummyTitle", "dummyContent");
+        String dummyTaskJason = json(dummyTask);
 
-    @Test
-    public void ShouldDELETETask() {
-        //Given
         //When
-        //Then
-    }
-
-    @Test
-    public void ShouldPUTTask() {
-        //Given
-        //When
-        //Then
+        this.mockMvc
+                .perform(put("/v1/tasks/3")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(dummyTaskJason))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.title").value("dummyTitle"));
     }
 
     @Test
     public void ShouldPOSTTask() throws Exception {
         //Given
+        TaskDto dummyTask = new TaskDto((long) 4, "dummyTitle", "dummyContent");
+        String dummyTaskJason = json(dummyTask);
+
         //When
+        this.mockMvc
+                .perform(post("/v1/tasks")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(dummyTaskJason))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        Task recoveredTask = taskService.getTask((long) 4)
+                .orElseThrow(TaskNotFoundException::new);
         //Then
+        Assert.assertEquals("dummyTitle", recoveredTask.getTitle());
+    }
+
+    @Before
+    public void setUp() throws Exception {
+        Task savedTask1 = new Task((long) 1, "testTitleH2Db1", "dummyContent1");
+        Task savedTask2 = new Task((long) 2, "testTitleH2Db2", "dummyContent2");
+        Task savedTask3 = new Task((long) 3, "testTitleH2Db3", "dummyContent3");
+        taskService.saveTask(savedTask1);
+        taskService.saveTask(savedTask2);
+        taskService.saveTask(savedTask3);
+    }
+
+    private String json(Object o) throws IOException {
+        MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
+        this.mappingJackson2HttpMessageConverter.write(
+                o, MediaType.APPLICATION_JSON, mockHttpOutputMessage);
+        return mockHttpOutputMessage.getBodyAsString();
     }
 }
