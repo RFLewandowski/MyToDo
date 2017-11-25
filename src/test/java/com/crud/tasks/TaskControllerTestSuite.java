@@ -13,12 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.mock.http.MockHttpOutputMessage;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
@@ -41,7 +38,7 @@ public class TaskControllerTestSuite {
     private TaskController taskController;
 
     @Autowired
-    private HttpMessageConverter mappingJackson2HttpMessageConverter;
+    JsonConverter jsonConverter;
 
     @Test
     public void ShouldLoadContext() {
@@ -99,7 +96,7 @@ public class TaskControllerTestSuite {
     public void ShouldPUTTask() throws Exception {
         //Given
         TaskDto dummyTask = new TaskDto((long) 3, "dummyTitle", "dummyContent");
-        String dummyTaskJason = json(dummyTask);
+        String dummyTaskJason = jsonConverter.json(dummyTask);
 
         //When
         this.mockMvc
@@ -116,7 +113,7 @@ public class TaskControllerTestSuite {
     public void ShouldPOSTTask() throws Exception {
         //Given
         TaskDto dummyTask = new TaskDto((long) 4, "dummyTitle", "dummyContent");
-        String dummyTaskJason = json(dummyTask);
+        String dummyTaskJason = jsonConverter.json(dummyTask);
 
         //When
         this.mockMvc
@@ -130,12 +127,5 @@ public class TaskControllerTestSuite {
                 .orElseThrow(TaskNotFoundException::new);
         //Then
         Assert.assertEquals("dummyTitle", recoveredTask.getTitle());
-    }
-
-    private String json(Object o) throws IOException {
-        MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
-        this.mappingJackson2HttpMessageConverter.write(
-                o, MediaType.APPLICATION_JSON, mockHttpOutputMessage);
-        return mockHttpOutputMessage.getBodyAsString();
     }
 }
