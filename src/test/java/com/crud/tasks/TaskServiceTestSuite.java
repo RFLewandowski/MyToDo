@@ -19,7 +19,7 @@ public class TaskServiceTestSuite {
     private TaskService taskService;
 
     @Test
-    public void ShouldSaveToH2Database() throws TaskNotFoundException {
+    public void ShouldReadFromDatabase() throws TaskNotFoundException {
         //Given
         //When
         Task recoveredTask = taskService.getTask((long) 1)

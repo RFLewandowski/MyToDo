@@ -48,6 +48,16 @@ public class TaskControllerTestSuite {
         assertNotNull(taskController);
     }
 
+    @Before
+    public void setUp() throws Exception {
+        Task savedTask1 = new Task((long) 1, "testTitleH2Db1", "dummyContent1");
+        Task savedTask2 = new Task((long) 2, "testTitleH2Db2", "dummyContent2");
+        Task savedTask3 = new Task((long) 3, "testTitleH2Db3", "dummyContent3");
+        taskService.saveTask(savedTask1);
+        taskService.saveTask(savedTask2);
+        taskService.saveTask(savedTask3);
+    }
+
     @Test
     public void ShouldGETTasks() throws Exception {
         this.mockMvc
@@ -120,16 +130,6 @@ public class TaskControllerTestSuite {
                 .orElseThrow(TaskNotFoundException::new);
         //Then
         Assert.assertEquals("dummyTitle", recoveredTask.getTitle());
-    }
-
-    @Before
-    public void setUp() throws Exception {
-        Task savedTask1 = new Task((long) 1, "testTitleH2Db1", "dummyContent1");
-        Task savedTask2 = new Task((long) 2, "testTitleH2Db2", "dummyContent2");
-        Task savedTask3 = new Task((long) 3, "testTitleH2Db3", "dummyContent3");
-        taskService.saveTask(savedTask1);
-        taskService.saveTask(savedTask2);
-        taskService.saveTask(savedTask3);
     }
 
     private String json(Object o) throws IOException {
