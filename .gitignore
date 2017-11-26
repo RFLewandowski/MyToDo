@@ -2,6 +2,7 @@
 /build/
 !gradle/wrapper/gradle-wrapper.jar
 /out/
+/webcontent
 
 ### IntelliJ IDEA ###
 .idea
