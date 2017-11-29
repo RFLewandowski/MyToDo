@@ -92,40 +92,40 @@ public class TaskControllerTestSuite {
 
     }
 
-    @Test
-    public void ShouldPUTTask() throws Exception {
-        //Given
-        TaskDto dummyTask = new TaskDto((long) 3, "dummyTitle", "dummyContent");
-        String dummyTaskJason = jsonConverter.json(dummyTask);
-
-        //When
-        this.mockMvc
-                .perform(put("/v1/tasks/3")
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content(dummyTaskJason))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.title").value("dummyTitle"));
-    }
-
-    @Test
-    public void ShouldPOSTTask() throws Exception {
-        //Given
-        TaskDto dummyTask = new TaskDto((long) 4, "dummyTitle", "dummyContent");
-        String dummyTaskJason = jsonConverter.json(dummyTask);
-
-        //When
-        this.mockMvc
-                .perform(post("/v1/tasks")
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content(dummyTaskJason))
-                .andDo(print())
-                .andExpect(status().isOk());
-
-        Task recoveredTask = taskService.getTask((long) 4)
-                .orElseThrow(TaskNotFoundException::new);
-        //Then
-        Assert.assertEquals("dummyTitle", recoveredTask.getTitle());
-    }
+//    @Test
+//    public void ShouldPUTTask() throws Exception {
+//        //Given
+//        TaskDto dummyTask = new TaskDto((long) 3, "dummyTitle", "dummyContent");
+//        String dummyTaskJason = jsonConverter.json(dummyTask);
+//
+//        //When
+//        this.mockMvc
+//                .perform(put("/v1/tasks/3")
+//                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+//                        .content(dummyTaskJason))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+//                .andExpect(jsonPath("$.title").value("dummyTitle"));
+//    }
+//
+//    @Test
+//    public void ShouldPOSTTask() throws Exception {
+//        //Given
+//        TaskDto dummyTask = new TaskDto((long) 4, "dummyTitle", "dummyContent");
+//        String dummyTaskJason = jsonConverter.json(dummyTask);
+//
+//        //When
+//        this.mockMvc
+//                .perform(post("/v1/tasks")
+//                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+//                        .content(dummyTaskJason))
+//                .andDo(print())
+//                .andExpect(status().isOk());
+//
+//        Task recoveredTask = taskService.getTask((long) 4)
+//                .orElseThrow(TaskNotFoundException::new);
+//        //Then
+//        Assert.assertEquals("dummyTitle", recoveredTask.getTitle());
+//    }
 }
