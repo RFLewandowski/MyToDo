@@ -20,7 +20,8 @@ public class TrelloClient {
     private String trelloUsername = "rdim1"; //@Value not working
 
     //@Value("${trello.api.endpoint.prod}")
-    private String trelloApiEndpoint = "https://api.trello.com/1"; //@Value not working
+    private String trelloApiEndpoint = "${trello.api.endpoint.prod}"; //= "https://api.trello.com/1"; //@Value not working
+    ;
 
     //@Value("${trello.app.key}")
     private String trelloAppKey = "87f5af154471db449dcf1174bf34890f"; //@Value not working
