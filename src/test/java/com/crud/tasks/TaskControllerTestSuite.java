@@ -23,8 +23,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+
 @RunWith(SpringRunner.class)
-@SpringBootTest()
+@SpringBootTest
 @AutoConfigureMockMvc
 public class TaskControllerTestSuite {
 
@@ -38,12 +39,8 @@ public class TaskControllerTestSuite {
     private TaskController taskController;
 
     @Autowired
-    JsonConverter jsonConverter;
+    private JsonConverter jsonConverter; //correcly autowired despite Intelij showing otherwise
 
-    @Test
-    public void ShouldLoadContext() {
-        assertNotNull(taskController);
-    }
 
     @Before
     public void setUp() throws Exception {
@@ -53,6 +50,12 @@ public class TaskControllerTestSuite {
         taskService.saveTask(savedTask1);
         taskService.saveTask(savedTask2);
         taskService.saveTask(savedTask3);
+    }
+
+
+    @Test
+    public void ShouldLoadContext() {
+        assertNotNull(taskController);
     }
 
     @Test
@@ -92,40 +95,40 @@ public class TaskControllerTestSuite {
 
     }
 
-//    @Test
-//    public void ShouldPUTTask() throws Exception {
-//        //Given
-//        TaskDto dummyTask = new TaskDto((long) 3, "dummyTitle", "dummyContent");
-//        String dummyTaskJason = jsonConverter.json(dummyTask);
-//
-//        //When
-//        this.mockMvc
-//                .perform(put("/v1/tasks/3")
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-//                        .content(dummyTaskJason))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-//                .andExpect(jsonPath("$.title").value("dummyTitle"));
-//    }
-//
-//    @Test
-//    public void ShouldPOSTTask() throws Exception {
-//        //Given
-//        TaskDto dummyTask = new TaskDto((long) 4, "dummyTitle", "dummyContent");
-//        String dummyTaskJason = jsonConverter.json(dummyTask);
-//
-//        //When
-//        this.mockMvc
-//                .perform(post("/v1/tasks")
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-//                        .content(dummyTaskJason))
-//                .andDo(print())
-//                .andExpect(status().isOk());
-//
-//        Task recoveredTask = taskService.getTask((long) 4)
-//                .orElseThrow(TaskNotFoundException::new);
-//        //Then
-//        Assert.assertEquals("dummyTitle", recoveredTask.getTitle());
-//    }
+    @Test
+    public void ShouldPUTTask() throws Exception {
+        //Given
+        TaskDto dummyTask = new TaskDto((long) 3, "dummyTitle", "dummyContent");
+        String dummyTaskJason = jsonConverter.json(dummyTask);
+
+        //When
+        this.mockMvc
+                .perform(put("/v1/tasks/3")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(dummyTaskJason))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.title").value("dummyTitle"));
+    }
+
+    @Test
+    public void ShouldPOSTTask() throws Exception {
+        //Given
+        TaskDto dummyTask = new TaskDto((long) 4, "dummyTitle", "dummyContent");
+        String dummyTaskJason = jsonConverter.json(dummyTask);
+
+        //When
+        this.mockMvc
+                .perform(post("/v1/tasks")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(dummyTaskJason))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        Task recoveredTask = taskService.getTask((long) 4)
+                .orElseThrow(TaskNotFoundException::new);
+        //Then
+        Assert.assertEquals("dummyTitle", recoveredTask.getTitle());
+    }
 }

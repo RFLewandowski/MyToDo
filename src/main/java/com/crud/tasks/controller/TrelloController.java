@@ -17,10 +17,10 @@ public class TrelloController {
     @Autowired
     TrelloClient trelloClient;
 
-//    @GetMapping("getTrelloBoards")
-//    public void getTrelloBoards() {
-//        List<TrelloBoardDto> trelloBoards = trelloClient.getTrelloBoards();
-//        trelloBoards.forEach(trelloBoardDto ->
-//                System.out.println(trelloBoardDto.getId() + " " + trelloBoardDto.getName()));
-//    }
+    @GetMapping("getTrelloBoards")
+    public void getTrelloBoards() {
+        List<TrelloBoardDto> trelloBoards = trelloClient.getTrelloBoards();
+        trelloBoards.forEach(trelloBoardDto ->
+                System.out.println(trelloBoardDto.getId() + " " + trelloBoardDto.getName()));
+    }
 }

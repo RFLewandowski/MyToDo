@@ -7,5 +7,5 @@ import lombok.Getter;
 @Getter
 public class TrelloBoardDto {
     private String name;
-    private int id;
+    private String id;
 }
