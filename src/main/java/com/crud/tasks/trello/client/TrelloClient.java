@@ -13,26 +13,28 @@ import java.util.List;
 
 @Component
 public class TrelloClient {
+
+    private final RestTemplate restTemplate;
+
+    //@Value("${trello.app.username}")//@Value annotation not working
+    private String trelloUsername = "rdim1";
+
+    //@Value("${trello.api.endpoint.prod}")//@Value annotation not working
+    private String trelloApiEndpoint = "https://api.trello.com/1";
+
+    //@Value("${trello.app.key}")//@Value annotation not working
+    private String trelloAppKey = "87f5af154471db449dcf1174bf34890f";
+
+    //@Value("${trello.app.token}")//@Value annotation not working
+    private String trelloToken = "7e0d86ef6f2816b6d0c92ae9ce54ef5a691e171515a0f2fd4e66395a38fbb01d";
+
     @Autowired
-    private RestTemplate restTemplate;
-
-    //@Value("${trello.app.username}")
-    private String trelloUsername = "rdim1"; //@Value not working
-
-    //@Value("${trello.api.endpoint.prod}")
-    private String trelloApiEndpoint = "${trello.api.endpoint.prod}"; //= "https://api.trello.com/1"; //@Value not working
-    ;
-
-    //@Value("${trello.app.key}")
-    private String trelloAppKey = "87f5af154471db449dcf1174bf34890f"; //@Value not working
-
-    //@Value("${trello.app.token}")
-    private String trelloToken = "7e0d86ef6f2816b6d0c92ae9ce54ef5a691e171515a0f2fd4e66395a38fbb01d"; //@Value not working
+    public TrelloClient(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     public List<TrelloBoardDto> getTrelloBoards() {
-        URI url = UriComponentsBuilder.fromHttpUrl(trelloApiEndpoint + "/members/" + trelloUsername + "/boards")
-                .queryParam("key", trelloAppKey)
-                .queryParam("token", trelloToken).build().encode().toUri();
+        URI url = buildTrelloURI();
 
         TrelloBoardDto[] boardsResponse = restTemplate.getForObject(url, TrelloBoardDto[].class);
 
@@ -40,5 +42,12 @@ public class TrelloClient {
             return Arrays.asList(boardsResponse);
         }
         return new ArrayList<>();
+    }
+
+    private URI buildTrelloURI() {
+        return UriComponentsBuilder
+                .fromHttpUrl(trelloApiEndpoint + "/members/" + trelloUsername + "/boards")
+                .queryParam("key", trelloAppKey)
+                .queryParam("token", trelloToken).build().encode().toUri();
     }
 }
