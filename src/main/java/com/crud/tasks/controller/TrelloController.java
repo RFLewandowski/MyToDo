@@ -24,12 +24,17 @@ public class TrelloController {
     @GetMapping("getTrelloBoards")
     public void getTrelloBoards() {
         List<TrelloBoardDto> trelloBoards = trelloClient.getTrelloBoards();
+
         trelloBoards
                 .stream()
                 .filter(trelloBoardDto -> trelloBoardDto.getId() != null
                         && trelloBoardDto.getName()
                         .contains("Kodilla"))
-                .forEach(trelloBoardDto ->
-                        System.out.println(trelloBoardDto.getId() + " " + trelloBoardDto.getName()));
+                .forEach(trelloBoardDto -> {
+                    System.out.println(trelloBoardDto.getId() + " " + trelloBoardDto.getName());
+                    System.out.println("This board contains lists: ");
+                    trelloBoardDto.getLists().forEach(trelloListDto ->
+                            System.out.println(trelloListDto.getName() + " - " + trelloListDto.getId() + " - " + trelloListDto.isClosed()));
+                });
     }
 }
