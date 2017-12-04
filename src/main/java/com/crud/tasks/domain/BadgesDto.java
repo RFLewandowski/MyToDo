@@ -10,10 +10,9 @@ import lombok.Getter;
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BadgesDto {
-
     @JsonProperty("votes")
-    int votes;
+    private int votes;
 
     @JsonProperty("attachmentsByType")
-    AttachmentByTypeDto attachments;
+    private AttachmentByTypeDto attachments;
 }
