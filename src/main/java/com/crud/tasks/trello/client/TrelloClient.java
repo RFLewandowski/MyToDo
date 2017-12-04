@@ -60,7 +60,6 @@ public class TrelloClient {
         return restTemplate.postForObject(url, null, CreatedTrelloCard.class);
     }
 
-
     private URI buildTrelloGetBoardsURI() {
         return UriComponentsBuilder
                 .fromHttpUrl(trelloApiEndpoint + "/members/" + trelloUsername + "/boards")
