@@ -1,7 +1,7 @@
 package com.crud.tasks.controller;
 
-import com.crud.tasks.domain.TaskDto;
-import com.crud.tasks.domain.TaskNotFoundException;
+import com.crud.tasks.domain.task.TaskDto;
+import com.crud.tasks.domain.task.TaskNotFoundException;
 import com.crud.tasks.mapper.TaskMapper;
 import com.crud.tasks.service.TaskService;
 import org.springframework.http.MediaType;

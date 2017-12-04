@@ -1,9 +1,9 @@
 package com.crud.tasks;
 
 import com.crud.tasks.controller.TaskController;
-import com.crud.tasks.domain.Task;
-import com.crud.tasks.domain.TaskDto;
-import com.crud.tasks.domain.TaskNotFoundException;
+import com.crud.tasks.domain.task.Task;
+import com.crud.tasks.domain.task.TaskDto;
+import com.crud.tasks.domain.task.TaskNotFoundException;
 import com.crud.tasks.service.TaskService;
 import org.junit.Assert;
 import org.junit.Before;
