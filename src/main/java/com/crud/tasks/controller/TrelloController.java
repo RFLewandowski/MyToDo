@@ -30,9 +30,8 @@ public class TrelloController {
 
         trelloBoards = trelloBoards
                 .stream()
-                .filter(trelloBoardDto -> trelloBoardDto.getId() != null
-                        && trelloBoardDto.getName()
-                        .contains("Kodilla"))
+                .filter(trelloBoardDto -> trelloBoardDto.getId() != null)
+                .filter(trelloBoardDto -> trelloBoardDto.getName().contains("Kodilla"))
                 .collect(Collectors.toList());
         return trelloBoards;
     }
