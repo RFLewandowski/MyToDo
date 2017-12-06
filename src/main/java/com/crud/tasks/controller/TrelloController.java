@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/v1/trello")
 public class TrelloController {
@@ -24,7 +25,6 @@ public class TrelloController {
 
     @GetMapping("getTrelloBoards")
     public List<TrelloBoardDto> getTrelloBoards() {
-
 
         List<TrelloBoardDto> trelloBoards = trelloClient.getTrelloBoards();
 
