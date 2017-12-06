@@ -94,7 +94,6 @@ public class TrelloClientTest {
     @Test
     public void shouldReturnEmptyList() throws URISyntaxException {
         //Given
-        URI uri = new URI("http://test.com/members/test/boards?key=test&token=test&fields=name,id&lists=all");
         when(restTemplate.getForObject(any(), any())).thenReturn(null);
 
         //When
