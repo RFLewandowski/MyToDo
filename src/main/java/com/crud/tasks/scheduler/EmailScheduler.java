@@ -25,16 +25,20 @@ public class EmailScheduler {
         this.adminConfig = adminConfig;
     }
 
-
-    //@Scheduled(cron = "0 0 10 * * *")
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(cron = "0 0 10 * * *")
+    //@Scheduled(fixedDelay = 10000)
     public void sendInformationEmail() {
         long size = taskRepository.count();
         Mail mail = new Mail(
                 adminConfig.getAdminMail(),
                 SUBJECT,
-                "Currently in database you got: " + size + " tasks");
+                "Currently in database you got: " + size + " task" + getCorrectEnding(size));
         simpleEmailService.send(mail);
     }
 
+    private String getCorrectEnding(long size) {
+        String ending = "";
+        if (size > 1) ending = "s";
+        return ending;
+    }
 }
