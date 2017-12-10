@@ -1,6 +1,7 @@
 package com.crud.tasks.service;
 
 import com.crud.tasks.domain.Mail;
+import com.crud.tasks.domain.MailConverter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -11,6 +12,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -19,8 +21,10 @@ public class SimpleEmailServiceTest {
     private SimpleEmailService simpleEmailService;
 
     @Mock
-    private JavaMailSender javaMailSender;
+    private MailConverter mailConverter;
 
+    @Mock
+    private JavaMailSender javaMailSender;
 
     @Test
     public void ShouldSendEmailWithCC() {
@@ -31,6 +35,7 @@ public class SimpleEmailServiceTest {
         mailMessage.setCc(mail.getCc());
         mailMessage.setSubject(mail.getSubject());
         mailMessage.setText(mail.getMessage());
+        when(mailConverter.convert(mail)).thenReturn(mailMessage);
 
         //When
         simpleEmailService.send(mail);
@@ -47,6 +52,7 @@ public class SimpleEmailServiceTest {
         mailMessage.setTo(mail.getTo());
         mailMessage.setSubject(mail.getSubject());
         mailMessage.setText(mail.getMessage());
+        when(mailConverter.convert(mail)).thenReturn(mailMessage);
 
         //When
         simpleEmailService.send(mail);
@@ -54,6 +60,4 @@ public class SimpleEmailServiceTest {
         //Then
         verify(javaMailSender, times(1)).send(mailMessage);
     }
-
-
 }
