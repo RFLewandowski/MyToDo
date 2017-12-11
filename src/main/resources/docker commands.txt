@@ -1,0 +1,17 @@
+#commands to build mysql image and set up database manually
+docker pull mysql/mysql-server:latest
+docker run --name=mysql01 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_ROOT_HOST=% -d mysql/mysql-server:latest
+docker exec -it mysql01 mysql -uroot -proot
+
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';
+GRANT ALL PRIVILEGES ON * . * TO 'admin'@'localhost';
+FLUSH PRIVILEGES;
+CREATE DATABASE task_crud;
+
+exit
+
+#usefull diagnostic commands
+docker version
+docker ps
+docker logs mysql01
