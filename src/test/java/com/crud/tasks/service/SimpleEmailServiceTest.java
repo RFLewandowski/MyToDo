@@ -10,9 +10,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -30,34 +28,32 @@ public class SimpleEmailServiceTest {
     public void ShouldSendEmailWithCC() {
         //Given
         Mail mail = new Mail("test@test.com", "testCC@test.com", "Test", "Test message");
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(mail.getTo());
-        mailMessage.setCc(mail.getCc());
-        mailMessage.setSubject(mail.getSubject());
-        mailMessage.setText(mail.getMessage());
-        when(mailConverter.convert(mail)).thenReturn(mailMessage);
+        SimpleMailMessage actualMailMessage = convertMail(mail);
+        when(mailConverter.convert(mail)).thenReturn(actualMailMessage);
 
         //When
         simpleEmailService.send(mail);
 
         //Then
-        verify(javaMailSender, times(1)).send(mailMessage);
+        verify(javaMailSender, times(1)).send(actualMailMessage);
     }
 
     @Test
     public void ShouldSendEmailWithoutCC() {
         //Given
         Mail mail = new Mail("test@test.com", "Test", "Test message");
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(mail.getTo());
-        mailMessage.setSubject(mail.getSubject());
-        mailMessage.setText(mail.getMessage());
-        when(mailConverter.convert(mail)).thenReturn(mailMessage);
+        SimpleMailMessage actualMailMessage = convertMail(mail);
+        when(mailConverter.convert(mail)).thenReturn(actualMailMessage);
 
         //When
         simpleEmailService.send(mail);
 
         //Then
-        verify(javaMailSender, times(1)).send(mailMessage);
+        verify(javaMailSender, times(1)).send(actualMailMessage);
+    }
+
+    private SimpleMailMessage convertMail(Mail mail) {
+        MailConverter actualMailConverter = new MailConverter();
+        return actualMailConverter.convert(mail);
     }
 }
