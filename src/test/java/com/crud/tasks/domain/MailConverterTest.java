@@ -6,8 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mail.SimpleMailMessage;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MailConverterTest {
@@ -26,8 +25,8 @@ public class MailConverterTest {
         SimpleMailMessage actualMailMessage = mailConverter.convert(mail);
         //Then
         assertNotNull(actualMailMessage);
-        assertEquals(expectedMailMessage.getTo(), actualMailMessage.getTo());
-        assertEquals(expectedMailMessage.getCc(), actualMailMessage.getCc());
+        assertArrayEquals(expectedMailMessage.getTo(), actualMailMessage.getTo());
+        assertArrayEquals(expectedMailMessage.getCc(), actualMailMessage.getCc());
         assertEquals(expectedMailMessage.getSubject(), actualMailMessage.getSubject());
         assertEquals(expectedMailMessage.getText(), actualMailMessage.getText());
     }
