@@ -1,3 +1,9 @@
+
+system variable DOCKER_TOOLBOX_INSTALL_PATH = "C:\Program Files\Docker Toolbox"
+
+cd "C:\Program Files\Docker Toolbox"
+"C:\Program Files\Git\bin\bash.exe" --login -i "C:\Program Files\Docker Toolbox\start.sh"
+
 #commands to build mysql image and set up database manually
 docker pull mysql/mysql-server:latest
 docker run --name=mysql01 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_ROOT_HOST=% -d mysql/mysql-server:latest
