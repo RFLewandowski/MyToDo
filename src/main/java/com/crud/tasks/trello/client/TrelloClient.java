@@ -1,7 +1,7 @@
 package com.crud.tasks.trello.client;
 
 import com.crud.tasks.domain.board.TrelloBoardDto;
-import com.crud.tasks.domain.card.CreatedTrelloCard;
+import com.crud.tasks.domain.card.CreatedTrelloCardDto;
 import com.crud.tasks.domain.card.TrelloCardDto;
 import com.crud.tasks.trello.config.TrelloConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +43,7 @@ public class TrelloClient {
         }
     }
 
-    public CreatedTrelloCard createdNewCard(TrelloCardDto trelloCardDto) {
+    public CreatedTrelloCardDto createdNewCard(TrelloCardDto trelloCardDto) {
         URI url = UriComponentsBuilder.fromHttpUrl(trelloConfig.getTrelloApiEndpoint() + "/cards")
                 .queryParam("key", trelloConfig.getTrelloAppKey())
                 .queryParam("token", trelloConfig.getTrelloToken())
@@ -54,7 +54,7 @@ public class TrelloClient {
                 .build()
                 .encode()
                 .toUri();
-        return restTemplate.postForObject(url, null, CreatedTrelloCard.class);
+        return restTemplate.postForObject(url, null, CreatedTrelloCardDto.class);
     }
 
     private URI buildTrelloGetBoardsURI() {
