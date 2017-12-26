@@ -1,4 +1,4 @@
-package com.crud.tasks.trello.facade;
+package com.crud.tasks.trello;
 
 import com.crud.tasks.mapper.TrelloMapper;
 import com.crud.tasks.domain.board.TrelloBoard;
@@ -37,7 +37,7 @@ public class TrelloFacade {
         return trelloMapper.mapToBoardsDto(filteredBoards);
     }
 
-    public CreatedTrelloCardDto creteCard(final TrelloCardDto trelloCardDto) {
+    public CreatedTrelloCardDto createCard(final TrelloCardDto trelloCardDto) {
         TrelloCard trelloCard = trelloMapper.mapToCard(trelloCardDto);
         trelloValidator.validateCard(trelloCard);
         return trelloService.createTrelloCard(trelloMapper.mapToCardDto(trelloCard));

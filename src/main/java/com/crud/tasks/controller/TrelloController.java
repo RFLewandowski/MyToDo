@@ -4,7 +4,7 @@ package com.crud.tasks.controller;
 import com.crud.tasks.domain.board.TrelloBoardDto;
 import com.crud.tasks.domain.card.CreatedTrelloCardDto;
 import com.crud.tasks.domain.card.TrelloCardDto;
-import com.crud.tasks.trello.facade.TrelloFacade;
+import com.crud.tasks.trello.TrelloFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +29,6 @@ public class TrelloController {
 
     @PostMapping("createTrelloCard")
     public CreatedTrelloCardDto createdTrelloCard(@RequestBody TrelloCardDto trelloCardDto) {
-        return trelloFacade.creteCard(trelloCardDto);
+        return trelloFacade.createCard(trelloCardDto);
     }
 }
