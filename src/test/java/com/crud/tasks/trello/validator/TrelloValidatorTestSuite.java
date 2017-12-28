@@ -29,7 +29,7 @@ public class TrelloValidatorTestSuite {
         trelloBoardsList.add(testTrelloBoard);
 
         //When
-        List<TrelloBoard> resultBoardList = trelloValidator.validateTrelloBoards(trelloBoardsList);
+        List<TrelloBoard> resultBoardList = trelloValidator.filterTrelloBoards(trelloBoardsList);
 
         //Then
         assertTrue(resultBoardList.size() == 1);

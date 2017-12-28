@@ -54,7 +54,7 @@ public class TrelloFacadeTestSuite {
 
         when(trelloService.fetchTrelloBoards()).thenReturn(trelloBoards);
         when(trelloMapper.mapToBoards(trelloBoards)).thenReturn(mappedTrelloBoards);
-        when(trelloValidator.validateTrelloBoards(mappedTrelloBoards)).thenReturn(new ArrayList<>());
+        when(trelloValidator.filterTrelloBoards(mappedTrelloBoards)).thenReturn(new ArrayList<>());
         when(trelloMapper.mapToBoardsDto(new ArrayList<>())).thenReturn(new ArrayList<>());
 
         //When
@@ -83,44 +83,44 @@ public class TrelloFacadeTestSuite {
         when(trelloService.fetchTrelloBoards()).thenReturn(trelloBoards);
         when(trelloMapper.mapToBoards(trelloBoards)).thenReturn(mappedTrelloBoards);
         when(trelloMapper.mapToBoardsDto(anyList())).thenReturn(trelloBoards);
-        when(trelloValidator.validateTrelloBoards(mappedTrelloBoards)).thenReturn(mappedTrelloBoards);
+        when(trelloValidator.filterTrelloBoards(mappedTrelloBoards)).thenReturn(mappedTrelloBoards);
 
         //When
         List<TrelloBoardDto> trelloBoardDtos = trelloFacade.fetchTrelloBoards();
+        TrelloBoardDto trelloBoardDto = trelloBoardDtos.get(0);
 
         //Then
         assertNotNull(trelloBoardDtos);
         assertEquals(1, trelloBoardDtos.size());
 
-        assertEquals("1", trelloBoardDtos.get(0).getId());
-        assertEquals("my_task", trelloBoardDtos.get(0).getName());
+        assertEquals("1", trelloBoardDto.getId());
+        assertEquals("my_task", trelloBoardDto.getName());
 
-        assertEquals("1", trelloBoardDtos.get(0).getLists().get(0).getId());
-        assertEquals("my_list", trelloBoardDtos.get(0).getLists().get(0).getName());
-        assertEquals(false, trelloBoardDtos.get(0).getLists().get(0).isClosed());
+        assertEquals("1", trelloBoardDto.getLists().get(0).getId());
+        assertEquals("my_list", trelloBoardDto.getLists().get(0).getName());
+        assertEquals(false, trelloBoardDto.getLists().get(0).isClosed());
     }
 
     @Test
     public void Should_CreateCard() {
 
         //Given
-        TrelloCardDto trelloCardDto = new TrelloCardDto("dummyCardName","dummyDescName","top","dummyList");
-        TrelloCard trelloCard = new TrelloCard("dummyCardName","dummyDescName","top","dummyList");
-        TrelloDto trelloDto = new TrelloDto(1,1);
+        TrelloCardDto trelloCardDto = new TrelloCardDto("dummyCardName", "dummyDescName", "top", "dummyList");
+        TrelloCard trelloCard = new TrelloCard("dummyCardName", "dummyDescName", "top", "dummyList");
+        TrelloDto trelloDto = new TrelloDto(1, 1);
         AttachmentByTypeDto attachmentByTypeDto = new AttachmentByTypeDto(trelloDto);
-        BadgesDto badgesDto = new BadgesDto(1,attachmentByTypeDto);
-        CreatedTrelloCardDto createdTrelloCardDto = new CreatedTrelloCardDto("dummyCardId","dummyCardName","dummyCardURL",badgesDto);
+        BadgesDto badgesDto = new BadgesDto(1, attachmentByTypeDto);
+        CreatedTrelloCardDto createdTrelloCardDto = new CreatedTrelloCardDto("dummyCardId", "dummyCardName", "dummyCardURL", badgesDto);
 
 
         when(trelloMapper.mapToCard(trelloCardDto)).thenReturn(trelloCard);
-        when(trelloMapper.mapToCardDto(trelloCard)).thenReturn(trelloCardDto);
         when(trelloService.createTrelloCard(trelloCardDto)).thenReturn(createdTrelloCardDto);
 
         //When
         CreatedTrelloCardDto expectedTrelloCardDto = trelloFacade.createCard(trelloCardDto);
 
         //Then
-        assertEquals(trelloCardDto.getName(),expectedTrelloCardDto.getName());
-        verify(trelloValidator,times(1)).validateCard(trelloCard);
+        assertEquals(trelloCardDto.getName(), expectedTrelloCardDto.getName());
+        verify(trelloValidator, times(1)).checkCard(trelloCard);
     }
 }

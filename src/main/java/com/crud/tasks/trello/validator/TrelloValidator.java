@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class TrelloValidator {
-    public void validateCard(final TrelloCard trelloCard) {
+    public void checkCard(final TrelloCard trelloCard) {
         if (trelloCard
                 .getName()
                 .toLowerCase()
@@ -22,7 +22,7 @@ public class TrelloValidator {
         }
     }
 
-    public List<TrelloBoard> validateTrelloBoards(final List<TrelloBoard> trelloBoards) {
+    public List<TrelloBoard> filterTrelloBoards(final List<TrelloBoard> trelloBoards) {
         log.info("Starting filtering boards...");
         List<TrelloBoard> filteredBoards = trelloBoards.stream()
                 .filter(trelloBoard -> !trelloBoard
