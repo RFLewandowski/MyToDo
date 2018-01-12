@@ -12,4 +12,16 @@ public class AdminConfig {
     private String adminName;
     @Value("${admin.mail}")
     private String adminMail;
+    @Value("${info.company.name}")
+    private String companyName;
+    @Value("${info.app.administrator.address.city}")
+    private String administratorCity;
+    @Value("${info.app.administrator.address.street}")
+    private String administratorStreet;
+    @Value("${info.app.administrator.address.number}")
+    private String administratorStreetNumber;
+
+    public String getCompanyNameAndAdminAddress() {
+        return companyName+", "+administratorCity + ", " + administratorStreet + " " + administratorStreetNumber;
+    }
 }
