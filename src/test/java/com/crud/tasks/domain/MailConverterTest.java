@@ -22,7 +22,7 @@ public class MailConverterTest {
         expectedMailMessage.setSubject(mail.getSubject());
         expectedMailMessage.setText(mail.getMessage());
         //When
-        SimpleMailMessage actualMailMessage = mailConverter.convert(mail);
+        SimpleMailMessage actualMailMessage = mailConverter.convertToSimpleMail(mail);
         //Then
         assertNotNull(actualMailMessage);
         assertArrayEquals(expectedMailMessage.getTo(), actualMailMessage.getTo());

@@ -35,9 +35,9 @@ public class TaskController {
                         .orElseThrow(TaskNotFoundException::new));
     }
 
-    @DeleteMapping("{taskId}")
-    public void deleteTask(@PathVariable("taskId") Long taskId) {
-        taskService.deleteTask(taskId);
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void createTask(@RequestBody TaskDto taskDto) {
+        taskService.saveTask(taskMapper.mapToTask(taskDto));
     }
 
     @PutMapping(path = "{taskId}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -45,8 +45,8 @@ public class TaskController {
         return taskMapper.mapToTaskDto(taskService.saveTask(taskMapper.mapToTask(taskDto)));
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void createTask(@RequestBody TaskDto taskDto) {
-        taskService.saveTask(taskMapper.mapToTask(taskDto));
+    @DeleteMapping("{taskId}")
+    public void deleteTask(@PathVariable("taskId") Long taskId) {
+        taskService.deleteTask(taskId);
     }
 }
