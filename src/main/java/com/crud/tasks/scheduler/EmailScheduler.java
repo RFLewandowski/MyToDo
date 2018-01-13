@@ -2,6 +2,7 @@ package com.crud.tasks.scheduler;
 
 import com.crud.tasks.config.AdminConfig;
 import com.crud.tasks.config.CoreConfiguration;
+import com.crud.tasks.domain.DailySummaryMail;
 import com.crud.tasks.domain.Mail;
 import com.crud.tasks.repository.TaskRepository;
 import com.crud.tasks.service.SimpleEmailService;
@@ -25,18 +26,18 @@ public class EmailScheduler {
         this.adminConfig = adminConfig;
     }
 
-    @Scheduled(cron = "0 0 10 * * *")
-    //@Scheduled(fixedDelay = 10000)
+    //@Scheduled(cron = "0 0 10 * * *")
+    @Scheduled(fixedDelay = 20000)
     public void sendInformationEmail() {
         long size = taskRepository.count();
-        Mail mail = new Mail(
+        Mail dailySummaryMail = new DailySummaryMail(
                 adminConfig.getAdminMail(),
                 SUBJECT,
-                "Currently in database you got: " + size + " task" + getCorrectEnding(size));
-        simpleEmailService.send(mail);
+                "Currently in database you got: " + size + " task" + getPluralEnding(size));
+        simpleEmailService.send(dailySummaryMail);
     }
 
-    private String getCorrectEnding(long size) {
+    private String getPluralEnding(long size) {
         String ending = "";
         if (size > 1) ending = "s";
         return ending;

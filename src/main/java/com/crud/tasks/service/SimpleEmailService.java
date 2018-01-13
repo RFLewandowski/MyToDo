@@ -1,7 +1,9 @@
 package com.crud.tasks.service;
 
+import com.crud.tasks.domain.DailySummaryMail;
 import com.crud.tasks.domain.Mail;
 import com.crud.tasks.domain.MailConverter;
+import com.crud.tasks.domain.TrelloCardMail;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
@@ -36,12 +38,19 @@ public class SimpleEmailService {
         }
     }
 
-    private MimeMessagePreparator createMimeMessage(final Mail mail){
+    private MimeMessagePreparator createMimeMessage(final Mail mail) {
         return mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setTo(mail.getTo());
             messageHelper.setSubject(mail.getSubject());
-            messageHelper.setText(mailCreatorService.buildTrelloCardEmail(mail.getMessage()),true);
+
+            if (mail instanceof TrelloCardMail) {
+                messageHelper.setText(mailCreatorService.buildTrelloCardEmail(mail.getMessage()), true);
+            } else if (mail instanceof DailySummaryMail) {
+                messageHelper.setText(mailCreatorService.buildDailySummaryEmail(mail.getMessage()), true);
+            } else {
+                log.error("Failed to prepare email - unknown email type.");
+            }
         };
     }
 
