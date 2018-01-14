@@ -24,7 +24,9 @@ public class TaskController {
 
     @GetMapping()
     public List<TaskDto> getTasks() {
-        return taskMapper.mapToTaskDtoList(taskService.getAllTasks());
+        return taskMapper
+                .mapToTaskDtoList(taskService
+                        .getAllTasks());
     }
 
     @GetMapping("{taskId}")
@@ -37,12 +39,17 @@ public class TaskController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public void createTask(@RequestBody TaskDto taskDto) {
-        taskService.saveTask(taskMapper.mapToTask(taskDto));
+        taskService
+                .saveTask(taskMapper
+                        .mapToTask(taskDto));
     }
 
     @PutMapping(path = "{taskId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public TaskDto updateTask(@RequestBody TaskDto taskDto) {
-        return taskMapper.mapToTaskDto(taskService.saveTask(taskMapper.mapToTask(taskDto)));
+        return taskMapper
+                .mapToTaskDto(taskService
+                        .saveTask(taskMapper
+                                .mapToTask(taskDto)));
     }
 
     @DeleteMapping("{taskId}")
