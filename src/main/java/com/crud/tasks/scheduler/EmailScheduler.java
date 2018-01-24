@@ -1,7 +1,6 @@
 package com.crud.tasks.scheduler;
 
 import com.crud.tasks.config.AdminConfig;
-import com.crud.tasks.config.CoreConfiguration;
 import com.crud.tasks.domain.DailySummaryMail;
 import com.crud.tasks.domain.Mail;
 import com.crud.tasks.repository.TaskRepository;
@@ -15,19 +14,17 @@ public class EmailScheduler {
     private static final String SUBJECT = "Tasks: Once a day email";
     private final SimpleEmailService simpleEmailService;
     private final TaskRepository taskRepository;
-    private final CoreConfiguration coreConfiguration;
     private final AdminConfig adminConfig;
 
     @Autowired
-    public EmailScheduler(SimpleEmailService simpleEmailService, TaskRepository taskRepository, CoreConfiguration coreConfiguration, AdminConfig adminConfig) {
+    public EmailScheduler(SimpleEmailService simpleEmailService, TaskRepository taskRepository, AdminConfig adminConfig) {
         this.simpleEmailService = simpleEmailService;
         this.taskRepository = taskRepository;
-        this.coreConfiguration = coreConfiguration;
         this.adminConfig = adminConfig;
     }
 
-    @Scheduled(cron = "0 0 10 * * *")
-    //@Scheduled(fixedDelay = 20000)
+    //@Scheduled(cron = "0 0 10 * * *")
+    @Scheduled(fixedDelay = 20000)
     public void sendInformationEmail() {
         long size = taskRepository.count();
         Mail dailySummaryMail = new DailySummaryMail(

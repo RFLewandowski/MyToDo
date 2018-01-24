@@ -10,10 +10,17 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
 
+import javax.mail.MessagingException;
+import java.util.Arrays;
+
 @Slf4j
 @Component
-public class MailConverter{
-private final MailCreatorService mailCreatorService;
+public class MailConverter {
+
+    private MimeMessageHelper messageHelper;
+    private String dailySummaryText;
+    private String trelloCardText;
+    private final MailCreatorService mailCreatorService;
 
     @Autowired
     public MailConverter(MailCreatorService mailCreatorService) {
@@ -32,17 +39,28 @@ private final MailCreatorService mailCreatorService;
 
     public MimeMessagePreparator convertToMimeMessage(Mail source) {
         return mimeMessage -> {
-            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+            messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setTo(source.getTo());
             messageHelper.setSubject(source.getSubject());
-
-            if (source instanceof TrelloCardMail) {
-                messageHelper.setText(mailCreatorService.buildTrelloCardEmail(source.getMessage()), true);
-            } else if (source instanceof DailySummaryMail) {
-                messageHelper.setText(mailCreatorService.buildDailySummaryEmail(source.getMessage()), true);
-            } else {
-                log.error("Failed to prepare email - unknown email type.");
+            dailySummaryText = mailCreatorService.buildTrelloCardEmail(source.getMessage());
+            trelloCardText = mailCreatorService.buildDailySummaryEmail(source.getMessage());
+            try {
+                setTextPerRequiredMailType(source);
+            } catch (MessagingException e) {
+                log.error("Some kind of unexpected messaging exception occurred. Check stack trace:\n" +
+                        Arrays.toString(e.getStackTrace()));
             }
         };
+    }
+
+    private void setTextPerRequiredMailType(Mail source) throws MessagingException {
+        if (source instanceof TrelloCardMail) {
+            messageHelper.setText(dailySummaryText, true);
+        } else if (source instanceof DailySummaryMail) {
+            messageHelper.setText(trelloCardText, true);
+        } else {
+            log.error("Failed to prepare email - unknown email type.");
+            throw new IllegalArgumentException();
+        }
     }
 }

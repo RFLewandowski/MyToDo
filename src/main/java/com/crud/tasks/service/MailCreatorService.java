@@ -13,15 +13,15 @@ import java.util.List;
 @Service
 public class MailCreatorService {
 
-    private Context context;
+    private final Context context;
     private final TemplateEngine templateEngine;
     private final AdminConfig adminConfig;
 
     @Autowired
-    public MailCreatorService(@Qualifier("templateEngine") TemplateEngine templateEngine, AdminConfig adminConfig) {
+    public MailCreatorService(@Qualifier("templateEngine") TemplateEngine templateEngine, AdminConfig adminConfig, Context context) {
         this.templateEngine = templateEngine;
         this.adminConfig = adminConfig;
-        context = new Context();
+        this.context = context;
     }
 
     public String buildTrelloCardEmail(String message) {
