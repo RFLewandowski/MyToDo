@@ -11,7 +11,6 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
-import java.util.Arrays;
 
 @Slf4j
 @Component
@@ -43,13 +42,7 @@ public class MailConverter {
             messageHelper.setSubject(source.getSubject());
             dailySummaryText = mailCreatorService.buildTrelloCardEmail(source.getMessage());
             trelloCardText = mailCreatorService.buildDailySummaryEmail(source.getMessage());
-            try {
-                setTextPerRequiredMailType(source, messageHelper);
-            } catch (MessagingException e) {
-                log.error("Some kind of unexpected messaging exception occurred. Check stack trace:\n" +
-                        Arrays.toString(e.getStackTrace()));
-                throw new MessagingException();
-            }
+            setTextPerRequiredMailType(source, messageHelper);
         };
     }
 
@@ -59,8 +52,7 @@ public class MailConverter {
         } else if (source instanceof DailySummaryMail) {
             messageHelper.setText(trelloCardText, true);
         } else {
-            log.error("Failed to prepare email - unknown email type.");
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Failed to prepare email - unknown email type.");
         }
     }
 }

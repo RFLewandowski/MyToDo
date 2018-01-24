@@ -18,7 +18,7 @@ public class MailCreatorService {
     private final AdminConfig adminConfig;
 
     @Autowired
-    public MailCreatorService(@Qualifier("templateEngine") TemplateEngine templateEngine, AdminConfig adminConfig, Context context) {
+    public MailCreatorService(TemplateEngine templateEngine, AdminConfig adminConfig, Context context) { //TemplateEngine templateEngine there is indeed one bean in spring context intellij lies:)
         this.templateEngine = templateEngine;
         this.adminConfig = adminConfig;
         this.context = context;
