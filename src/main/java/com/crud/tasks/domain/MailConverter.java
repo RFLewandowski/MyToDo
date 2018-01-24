@@ -17,7 +17,6 @@ import java.util.Arrays;
 @Component
 public class MailConverter {
 
-    private MimeMessageHelper messageHelper;
     private String dailySummaryText;
     private String trelloCardText;
     private final MailCreatorService mailCreatorService;
@@ -39,21 +38,22 @@ public class MailConverter {
 
     public MimeMessagePreparator convertToMimeMessage(Mail source) {
         return mimeMessage -> {
-            messageHelper = new MimeMessageHelper(mimeMessage);
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setTo(source.getTo());
             messageHelper.setSubject(source.getSubject());
             dailySummaryText = mailCreatorService.buildTrelloCardEmail(source.getMessage());
             trelloCardText = mailCreatorService.buildDailySummaryEmail(source.getMessage());
             try {
-                setTextPerRequiredMailType(source);
+                setTextPerRequiredMailType(source, messageHelper);
             } catch (MessagingException e) {
                 log.error("Some kind of unexpected messaging exception occurred. Check stack trace:\n" +
                         Arrays.toString(e.getStackTrace()));
+                throw new MessagingException();
             }
         };
     }
 
-    private void setTextPerRequiredMailType(Mail source) throws MessagingException {
+    private void setTextPerRequiredMailType(Mail source, MimeMessageHelper messageHelper) throws MessagingException {
         if (source instanceof TrelloCardMail) {
             messageHelper.setText(dailySummaryText, true);
         } else if (source instanceof DailySummaryMail) {
