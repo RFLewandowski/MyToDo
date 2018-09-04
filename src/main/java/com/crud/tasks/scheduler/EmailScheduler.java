@@ -35,8 +35,6 @@ public class EmailScheduler {
     }
 
     private String getPluralEnding(long size) {
-        String ending = "";
-        if (size > 1) ending = "s";
-        return ending;
+        return size>1?"s":"";
     }
 }
